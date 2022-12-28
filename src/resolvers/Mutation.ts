@@ -1,128 +1,37 @@
 import {MutationResolvers} from '@generated/resolvers-types';
-import {comparePassword, encryptPassword, signToken} from '../common/utils/auth';
+import {AuthService, PostService, UserService} from 'src/services';
 import {AuthenticationError, BadRequestError} from '../common/utils/error';
 
 const Mutation: MutationResolvers = {
   signup: async (_, args, {prisma}) => {
-    const password = await encryptPassword(args.password);
-    const user = await prisma.user.create({
-      data: {...args, password},
-    });
-    const token = signToken(user.id);
-    return token;
+    return AuthService.signUp(args, prisma.user);
   },
   login: async (_, args, {prisma}) => {
-    const user = await prisma.user.findUnique({where: {email: args.email}});
-    if (!user) {
-      throw BadRequestError('No user found for this email');
-    }
-    const valid = await comparePassword(args.password, user.password);
-    if (!valid) {
-      throw BadRequestError('Invalid password');
-    }
-    const token = signToken(user.id);
-    return token;
+    return AuthService.validateUser(args.email, args.password, prisma.user);
   },
   createPost: async (_, {createPostInput}, {prisma, userId, userRole}) => {
     if (!userId) {
       throw AuthenticationError();
     }
-    if (userRole === 'Host') {
-      try {
-        const newPost = await prisma.post.create({
-          data: {
-            ...createPostInput,
-            authorId: userId,
-          },
-          include: {
-            author: true,
-          },
-        });
-
-        return {
-          code: 200,
-          success: true,
-          message: 'Listing successfully created!',
-          post: newPost,
-        };
-      } catch (err: any) {
-        return {
-          code: 400,
-          success: false,
-          message: err.message,
-        };
-      }
-    } else {
-      return {
-        code: 400,
-        success: false,
-        message: 'Only hosts can create new listings',
-      };
-    }
+    return PostService.createPost({userId, userRole}, createPostInput, prisma.post);
   },
   deleteUser: async (_, {id}, {prisma, userId, userRole}) => {
     if (!userId) {
       throw AuthenticationError();
     }
-    if (userRole === 'Host') {
-      try {
-        await prisma.user.delete({where: {id}});
-        return true;
-      } catch (err: any) {
-        return false;
-      }
-    } else {
-      return false;
-    }
+    return UserService.deleteUser({userRole}, id, prisma.user);
   },
-  updateProfile: async (
-    _,
-    {updateProfileInput},
-    {prisma, userId, userRole}
-  ) => {
+  updateProfile: async (_, {updateProfileInput}, {prisma, userId, userRole}) => {
     if (!userId) {
       throw AuthenticationError();
     }
-    if (userRole === 'Host') {
-      try {
-        await prisma.user.update({
-          where: {id: userId},
-          data: {...updateProfileInput},
-        });
-        return true;
-      } catch (err: any) {
-        return false;
-      }
-    } else {
-      return false;
-    }
+    return UserService.updateProfile({ userId, userRole }, updateProfileInput, prisma.user);
   },
   updatePost: async (_, {id, updatePostInput}, {prisma, userId, userRole}) => {
     if (!userId) {
       throw AuthenticationError();
     }
-    if (userRole === 'Host') {
-      try {
-        await prisma.post.update({where: {id}, data: {...updatePostInput}});
-        return {
-          code: 200,
-          success: true,
-          message: 'Listing successfully updated!',
-        };
-      } catch (err: any) {
-        return {
-          code: 400,
-          success: false,
-          message: err.message,
-        };
-      }
-    } else {
-      return {
-        code: 400,
-        success: false,
-        message: 'Only hosts can update listings',
-      };
-    }
+    return PostService.updatePost({userId, userRole}, id, updatePostInput, prisma.post);
   },
 };
 
