@@ -1,6 +1,6 @@
 import {QueryResolvers} from '@generated/resolvers-types';
-import {AuthenticationError, BadRequestError} from 'src/common/utils/error';
-import {paginationResult} from 'src/common/utils/helper';
+import {AuthenticationError, BadRequestError} from '../common/utils/error';
+import {paginationResult} from '../common/utils/helper';
 
 const Query: QueryResolvers = {
   me: async (_, __, {prisma, userId}) => {

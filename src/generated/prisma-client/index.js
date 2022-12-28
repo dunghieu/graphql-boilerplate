@@ -142,7 +142,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "D:\\VSCode\\GraphQL-Boilerplate\\src\\generated\\prisma-client",
+      "value": "D:\\VScode\\Beginners\\graphql-boilerplate\\src\\generated\\prisma-client",
       "fromEnvVar": null
     },
     "config": {
@@ -153,8 +153,7 @@ const config = {
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": "..\\..\\..\\.env",
-    "schemaEnvPath": "..\\..\\..\\.env"
+    "rootEnvPath": null
   },
   "relativePath": "..\\..\\..\\prisma",
   "clientVersion": "4.8.0",

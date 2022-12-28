@@ -1,6 +1,6 @@
 import {MutationResolvers} from '@generated/resolvers-types';
-import {comparePassword, encryptPassword, signToken} from 'src/common/utils/auth';
-import {AuthenticationError, BadRequestError} from 'src/common/utils/error';
+import {comparePassword, encryptPassword, signToken} from '../common/utils/auth';
+import {AuthenticationError, BadRequestError} from '../common/utils/error';
 
 const Mutation: MutationResolvers = {
   signup: async (_, args, {prisma}) => {

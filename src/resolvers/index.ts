@@ -4,7 +4,7 @@ import Mutation from './Mutation';
 import Post from './Post';
 import Host from './Host';
 import User from './User';
-import { dateScalar } from 'src/common/scalars';
+import { dateScalar } from '../common/scalars';
   
 const resolvers: Resolvers = {
   Query,
