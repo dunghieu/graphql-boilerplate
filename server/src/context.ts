@@ -12,7 +12,7 @@ export interface Context {
   };
 }
 
-export const contextFactory = async ({req}): Promise<Context> => {
+export const contextFactory = async ({ req }): Promise<Context> => {
   const token = req && req.headers.authorization
     ? verifyToken(req.headers.authorization)
     : null;

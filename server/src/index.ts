@@ -23,6 +23,7 @@ const server = new ApolloServer<Context>({
   plugins: [ApolloServerPluginDrainHttpServer({httpServer})],
 });
 const port = Number.parseInt(process.env.PORT) || 4000;
+const url = process.env.FRONTEND_URL || 'http://localhost:3000';
 
 const startApolloServer = async () => {
   await server.start();
@@ -31,8 +32,7 @@ const startApolloServer = async () => {
     '/graphql',
     cors<cors.CorsRequest>({
       origin: [
-        'https://www.your-app.example',
-        'https://studio.apollographql.com',
+        url
       ],
       credentials: true,
     }),

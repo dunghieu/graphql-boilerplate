@@ -1,6 +1,6 @@
 import {HostResolvers} from '@generated/resolvers-types';
 
-const Host: HostResolvers = {
+export const Host: HostResolvers = {
     posts: async (parent, _, {prisma}) => {
     const posts = (await prisma.user
       .findUnique({
@@ -11,4 +11,3 @@ const Host: HostResolvers = {
   },
 };
 
-export default Host;
