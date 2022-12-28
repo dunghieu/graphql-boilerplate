@@ -1,0 +1,181 @@
+type Query {
+  ### User accounts
+  me: User
+  users: [User]
+  user(id: ID!): User!
+
+  ### Posts
+  "Search results for posts that fit the criteria provided"
+  searchPosts(criteria: SearchPostsInput): PostsPaginationResponse!
+  "Return the posts that belong to the currently logged-in host"
+  hostPosts(criteria: SearchPostsInput): PostsPaginationResponse!
+  "Returns the details about this post"
+  post(id: ID!): Post
+}
+
+type Mutation {
+  ### Accounts
+  "Creates a new user account"
+  signup(email: String!, password: String!, name: String): String
+  "Logs in an existing user and returns an auth token"
+  login(email: String!, password: String!): String
+  "Updates the logged-in user's profile information"
+  updateProfile(updateProfileInput: UpdateProfileInput): Boolean!
+  "Deletes user account"
+  deleteUser(id: ID!): Boolean!
+
+  ### Posts
+  "Creates a new post"
+  createPost(createPostInput: CreatePostInput!): CreatePostResponse!
+  "Updates a post"
+  updatePost(id: ID!, updatePostInput: UpdatePostInput): UpdatePostResponse!
+}
+
+interface MutationResponse {
+  "Similar to HTTP status code, represents the status of the mutation"
+  code: Int!
+  "Indicates whether the mutation was successful"
+  success: Boolean!
+  "Human-readable message for the UI"
+  message: String!
+}
+
+interface User {
+  id: ID!
+  "The user's first and last name"
+  name: String
+  "The user's email address"
+  email: String!
+  "The user's password"
+  password: String!
+}
+
+type Host implements User {
+  id: ID!
+  "The user's first and last name"
+  name: String
+  "The user's email address"
+  email: String!
+  "The user's password"
+  password: String!
+  "The posts this host owns"
+  posts: [Post]
+}
+
+type Guest implements User {
+  id: ID!
+  "The user's first and last name"
+  name: String
+  "The user's email address"
+  email: String!
+  "The user's password"
+  password: String!
+}
+
+"""
+Fields that can be updated
+"""
+input UpdateProfileInput {
+  "The user's first and last name"
+  name: String
+  "The user's password"
+  password: String
+}
+
+type Post {
+  id: ID!
+  "The post's creation date"
+  createdAt: Date!
+  "The post's update date"
+  updatedAt: Date!
+  "The post's title"
+  title: String!
+  "The post's content"
+  content: String!
+  "The thumbnail image for the post"
+  photoThumbnail: String!
+  "The post's author"
+  author: Host
+}
+
+"""
+Used to create a post
+"""
+input CreatePostInput {
+  "The post's title"
+  title: String!
+  "The post's content"
+  content: String!
+  "The thumbnail image for the post"
+  photoThumbnail: String!
+}
+
+"Updates the properties included. If none are given, don't update anything"
+input UpdatePostInput {
+  "The post's title"
+  title: String
+  "The post's content"
+  content: String
+  "The thumbnail image for the post"
+  photoThumbnail: String
+}
+
+"""
+Response after creating a post
+"""
+type CreatePostResponse implements MutationResponse {
+  "Similar to HTTP status code, represents the status of the mutation"
+  code: Int!
+  "Indicates whether the mutation was successful"
+  success: Boolean!
+  "Human-readable message for the UI"
+  message: String!
+  "The newly created post"
+  post: Post
+}
+
+"""
+Response after updating a post
+"""
+type UpdatePostResponse implements MutationResponse {
+  "Similar to HTTP status code, represents the status of the mutation"
+  code: Int!
+  "Indicates whether the mutation was successful"
+  success: Boolean!
+  "Human-readable message for the UI"
+  message: String!
+  "The newly updated post"
+  post: Post
+}
+
+"""
+To search for a post, you need these fields.
+"""
+input SearchPostsInput {
+  authorId: ID
+  "The page in the search results, defaults to 1"
+  page: Int
+  "The number of posts you can display in a page, defaults to 5"
+  pageSize: Int
+  "The cursor to the next page"
+  after: String
+}
+
+interface PaginationResponse {
+  "The cursor to the next page"
+  cursor: String
+  "Indicates whether there are more pages"
+  hasMore: Boolean!
+}
+
+type PostsPaginationResponse implements PaginationResponse {
+  "The cursor to the next page"
+  cursor: String
+  "Indicates whether there are more pages"
+  hasMore: Boolean!
+  "The posts"
+  posts: [Post]!
+}
+
+# This is a custom scalar type
+scalar Date

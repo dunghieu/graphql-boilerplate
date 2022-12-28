@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "ES2018",
+    "module": "CommonJS",
+    "lib": ["esnext"],
+    // "strict": true,
+    "rootDirs": ["src", "prisma"],
+    "outDir": "dist",
+    "baseUrl": "./",
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "paths": {
+      "@utils/*": ["src/common/utils/*"],
+      "@generated/*": ["src/generated/*"]
+    }
+  },
+  "include": ["src/**/*", "prisma/**/*"],
+  "exclude": ["node_modules"],
+  "ts-node": {
+    "esm": true,
+    "require": ["tsconfig-paths/register"]
+  }
+}
