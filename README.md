@@ -2,6 +2,27 @@
 
 A Full-Stack React Apollo Graphql Boilerplate written in Typescript. A scalable development that focus on performance and best practices. Easily plugable client or server code to build on top.
 
+## Why GraphQL?
+
+### GraphQL provides declarative, efficient data fetching
+
+GraphQL's declarative approach to data fetching provides significant performance and quality-of-life improvements over a REST API.
+REST API requires multiple dependent network requests, which can result in slower page loads and additional battery consumption on mobile devices. This logic is also difficult to reuse on other pages that display slightly different data.
+By using GraphQL, the page can obtain all of this data with a single query to a single endpoint.
+
+### GraphQL enables powerful tooling
+
+Thanks to GraphQL's strong typing and built-in support for introspection, developer tools for GraphQL are extremely powerful. These tools let you do things like:
+
+- Explore the full structure of a schema, complete with docstrings
+- Compose new operations with live validation and autocomplete
+- Register your schema with a management service that tracks and checks changes
+
+### Conclusion
+
+GraphQL's single greatest benefit is the developer experience. You can reduce these challenges considerably. GraphQL's declarative model helps you create a consistent, predictable API you can use across all of your clients. As you add, remove, and migrate backend data stores, that API doesn't change from the client's perspective.
+It's straightforward to add new types and fields to your API, and similarly straightforward for your clients to begin using those fields. This helps you design, develop, and deploy features quickly.
+
 ## Features
 
 ### Next Generation JavaScript with Typescript
